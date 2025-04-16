@@ -38,8 +38,8 @@ const startMonitoring = (io) => {
 
     ws.on('message', (data) => {
       try {
-        console.log(data);
-        const json = JSON.parse(data);
+        //console.log(data.toString()); // I added this part as test then the console log shows some sequence
+        const json = JSON.parse(data.toString());
         if (json.channel === 'user' && json.data?.fills?.length) {
           const fill = json.data.fills[0];
           if (fillMatchesCriteria(fill)) {
@@ -90,7 +90,7 @@ const subscribe = (ws) => {
   const msg = {
     method: "subscribe",
     subscription: {
-      type: "userFills",
+      type: "userEvents",
       user: process.env.WALLET_ADDRESS
     }
   };
