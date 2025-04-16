@@ -1,20 +1,10 @@
 {
-  "name": "hyperliquid-socketio-monitor",
+  "name": "socketio-app",
   "version": "1.0.0",
-  "description": "Monitors Hyperliquid fills and emits alerts via Socket.IO",
   "main": "server.js",
   "scripts": {
     "start": "node server.js"
   },
-  "keywords": [
-    "socket.io",
-    "websockets",
-    "hyperliquid",
-    "crypto",
-    "alerts"
-  ],
-  "author": "Your Name",
-  "license": "MIT",
   "dependencies": {
     "dotenv": "^16.3.1",
     "ethers": "^6.8.1",
