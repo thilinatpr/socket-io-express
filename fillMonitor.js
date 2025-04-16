@@ -38,6 +38,7 @@ const startMonitoring = (io) => {
 
     ws.on('message', (data) => {
       try {
+        console.log(data);
         const json = JSON.parse(data);
         if (json.channel === 'user' && json.data?.fills?.length) {
           const fill = json.data.fills[0];
