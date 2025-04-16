@@ -1,7 +1,6 @@
 const WebSocket = require('ws');
 const { ethers } = require('ethers');
-const { signMessage } = require('@metamask/eth-sig-util'); // Or use ethers Wallet
-const { keccak256, toUtf8Bytes } = require('ethers/lib/utils');
+require('dotenv').config();
 
 const uri = "wss://api.hyperliquid-testnet.xyz/ws";
 const tokenFilters = ["SOL", "BTC"];
@@ -22,9 +21,8 @@ const fillMatchesCriteria = (fill) => {
   );
 };
 
-function parseFill(fill) {
-  return `${fill.dir} ${fill.coin} | Size: ${fill.sz} | Price: ${fill.px} | PnL: ${fill.closedPnl ?? 'N/A'}`;
-}
+const parseFill = (fill) =>
+  `${fill.dir} ${fill.coin} | Size: ${fill.sz} | Price: ${fill.px} | PnL: ${fill.closedPnl ?? 'N/A'}`;
 
 const startMonitoring = (io) => {
   let ws;
@@ -32,9 +30,9 @@ const startMonitoring = (io) => {
   const connect = () => {
     ws = new WebSocket(uri);
 
-    ws.on('open', () => {
+    ws.on('open', async () => {
       console.log('WebSocket connected');
-      authenticate(ws);
+      await authenticate(ws);
       subscribe(ws);
     });
 
@@ -68,24 +66,23 @@ const startMonitoring = (io) => {
   connect();
 };
 
-const authenticate = (ws) => {
+const authenticate = async (ws) => {
   const wallet = new ethers.Wallet(process.env.PRIVATE_KEY);
   const timestamp = Date.now();
   const msg = `hyperliquid_${timestamp}`;
-  const sig = wallet.signMessage(msg);
+  const signature = await wallet.signMessage(msg);
 
-  sig.then((signature) => {
-    const authPayload = {
-      method: "subscribe",
-      subscription: {
-        type: "user",
-        user: process.env.WALLET_ADDRESS
-      },
-      signature,
-      timestamp
-    };
-    ws.send(JSON.stringify(authPayload));
-  });
+  const authPayload = {
+    method: "subscribe",
+    subscription: {
+      type: "user",
+      user: process.env.WALLET_ADDRESS
+    },
+    signature,
+    timestamp
+  };
+
+  ws.send(JSON.stringify(authPayload));
 };
 
 const subscribe = (ws) => {
