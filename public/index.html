@@ -1,23 +1,16 @@
 <!DOCTYPE html>
 <html>
-  <head><title>Chat</title></head>
+  <head><title>Fills</title></head>
   <body>
-    <ul id="messages"></ul>
-    <input id="input" /><button onclick="send()">Send</button>
+    <h1>Live Fills</h1>
+    <ul id="alerts"></ul>
     <script src="/socket.io/socket.io.js"></script>
     <script>
       const socket = io();
-
-      function send() {
-        const msg = document.getElementById('input').value;
-        socket.emit('chat message', msg);
-        document.getElementById('input').value = '';
-      }
-
-      socket.on('chat message', msg => {
+      socket.on('fill_alert', (msg) => {
         const li = document.createElement('li');
         li.textContent = msg;
-        document.getElementById('messages').appendChild(li);
+        document.getElementById('alerts').appendChild(li);
       });
     </script>
   </body>
