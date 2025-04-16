@@ -1,6 +1,6 @@
 const WebSocket = require('ws');
 const { ethers } = require('ethers');
-const { signMessage } = require('eth-sig-util'); // Or use ethers Wallet
+const { signMessage } = require('@metamask/eth-sig-util'); // Or use ethers Wallet
 const { keccak256, toUtf8Bytes } = require('ethers/lib/utils');
 
 const uri = "wss://api.hyperliquid-testnet.xyz/ws";
